@@ -36,8 +36,4 @@ public class BrandService {
         Brand saveBrand = brandRepository.save(brand);
         return brandMapper.toBrandResponseDTO(saveBrand);
     }
-
-    public void deleteBrandById(Integer id) {
-        brandRepository.deleteById(id);
-    }
 }

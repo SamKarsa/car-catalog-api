@@ -1,7 +1,9 @@
 package com.prueba.car_catalog.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.prueba.car_catalog.dto.request.CarRequestDTO;
@@ -12,6 +14,7 @@ import com.prueba.car_catalog.model.Car;
 import com.prueba.car_catalog.repository.BrandRepository;
 import com.prueba.car_catalog.repository.CarRepository;
 
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -46,7 +49,60 @@ public class CarService {
         return carMapper.toCarResponseDTO(savedCar);
     }
 
-    public void deleteCarById(Integer id) {
-        carRepository.deleteById(id);
+    public List<CarResponseDTO> filterCars(
+            String model,
+            Integer minPrice,
+            Integer maxPrice,
+            Integer minMileage,
+            Integer maxMileage,
+            Integer brandId) {
+
+        // Verificar si se filtró por marca y obtener la entidad Brand
+        final Brand brand;
+        if (brandId != null) {
+            brand = brandRepository.findById(brandId)
+                    .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
+        } else {
+            brand = null;
+        }
+
+        // Construir especificación de filtros
+        Specification<Car> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (model != null && !model.isEmpty()) {
+                predicates.add(cb.like(
+                        cb.lower(root.get("model")),
+                        "%" + model.toLowerCase() + "%"));
+            }
+
+            if (minPrice != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+            }
+
+            if (maxPrice != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+            }
+
+            if (minMileage != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("mileage"), minMileage));
+            }
+
+            if (maxMileage != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("mileage"), maxMileage));
+            }
+
+            if (brand != null) {
+                predicates.add(cb.equal(root.get("brand"), brand));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        // Ejecutar consulta y mapear resultados
+        return carRepository.findAll(spec)
+                .stream()
+                .map(carMapper::toCarResponseDTO)
+                .toList();
     }
 }
