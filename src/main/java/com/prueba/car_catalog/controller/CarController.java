@@ -42,9 +42,9 @@ public class CarController {
         CarResponseDTO createdCar = carService.saveCar(carRequestDTO);
 
         return new ApiResponse<>(
-                "Car created successfully",
-                201,
-                createdCar);
+                createdCar,
+                200,
+                "Respuesta ok");
     }
 
     @DeleteMapping("/{id}")

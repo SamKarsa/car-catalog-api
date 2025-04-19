@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.prueba.car_catalog.dto.request.BrandRequestDTO;
 import com.prueba.car_catalog.dto.response.BrandResponseDTO;
 import com.prueba.car_catalog.mapper.BrandMapper;
 import com.prueba.car_catalog.model.Brand;
@@ -28,8 +29,10 @@ public class BrandService {
         return brandRepository.findById(id).orElse(null);
     }
 
-    public Brand saveBrand(Brand brand) {
-        return brandRepository.save(brand);
+    public BrandResponseDTO saveBrand(BrandRequestDTO brandrRequestDTO) {
+        Brand brand = brandMapper.toEntity(brandrRequestDTO);
+        Brand saveBrand = brandRepository.save(brand);
+        return brandMapper.toBrandResponseDTO(saveBrand);
     }
 
     public void deleteBrandById(Integer id) {
