@@ -20,9 +20,6 @@ public class BrandController {
 
     @GetMapping("/all")
     public List<BrandResponseDTO> getAllBrands() {
-        return brandService.getAllBrands()
-                .stream()
-                .map(BrandResponseDTO::fromEntity)
-                .toList();
+        return brandService.getAllBrands();
     }
 }

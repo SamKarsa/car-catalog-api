@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.car_catalog.dto.ApiResponse;
+import com.prueba.car_catalog.dto.request.CarRequestDTO;
 import com.prueba.car_catalog.dto.response.CarResponseDTO;
 import com.prueba.car_catalog.model.Car;
 import com.prueba.car_catalog.service.CarService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -34,9 +38,13 @@ public class CarController {
     }
 
     @PostMapping
-    public Car createCar(@RequestBody Car newCar) {
-        carService.saveCar(newCar);
-        return newCar;
+    public ApiResponse<CarResponseDTO> createCar(@Valid @RequestBody CarRequestDTO carRequestDTO) {
+        CarResponseDTO createdCar = carService.saveCar(carRequestDTO);
+
+        return new ApiResponse<>(
+                "Car created successfully",
+                201,
+                createdCar);
     }
 
     @DeleteMapping("/{id}")
