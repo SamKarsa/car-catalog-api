@@ -4,22 +4,27 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.prueba.car_catalog.dto.response.CarResponseDTO;
+import com.prueba.car_catalog.mapper.CarMapper;
 import com.prueba.car_catalog.model.Car;
 import com.prueba.car_catalog.repository.CarRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CarService {
     private final CarRepository carRepository;
+    private final CarMapper carMapper;
 
-    public CarService(CarRepository carRepository) {
-        this.carRepository = carRepository;
+    public List<CarResponseDTO> getAllCars() {
+        return carRepository.findAll()
+                .stream()
+                .map(carMapper::toCarResponseDTO)
+                .toList();
     }
 
-    public List<Car> getAllCars() {
-        return carRepository.findAll();
-    }
-
-    public Car getCarById(int id) {
+    public Car getCarById(Integer id) {
         return carRepository.findById(id).orElse(null);
     }
 
@@ -27,7 +32,7 @@ public class CarService {
         carRepository.save(car);
     }
 
-    public void deleteCarById(int id) {
+    public void deleteCarById(Integer id) {
         carRepository.deleteById(id);
     }
 }

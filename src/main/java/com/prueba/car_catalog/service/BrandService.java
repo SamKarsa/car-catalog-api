@@ -19,7 +19,7 @@ public class BrandService {
         return brandRepository.findAll();
     }
 
-    public Brand getBrandById(int id) {
+    public Brand getBrandById(Integer id) {
         return brandRepository.findById(id).orElse(null);
     }
 
@@ -27,7 +27,7 @@ public class BrandService {
         return brandRepository.save(brand);
     }
 
-    public void deleteBrandById(int id) {
+    public void deleteBrandById(Integer id) {
         brandRepository.deleteById(id);
     }
 }
