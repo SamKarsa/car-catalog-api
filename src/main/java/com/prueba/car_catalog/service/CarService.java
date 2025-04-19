@@ -57,7 +57,6 @@ public class CarService {
             Integer maxMileage,
             Integer brandId) {
 
-        // Verificar si se filtró por marca y obtener la entidad Brand
         final Brand brand;
         if (brandId != null) {
             brand = brandRepository.findById(brandId)
@@ -66,7 +65,6 @@ public class CarService {
             brand = null;
         }
 
-        // Construir especificación de filtros
         Specification<Car> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -99,7 +97,6 @@ public class CarService {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
-        // Ejecutar consulta y mapear resultados
         return carRepository.findAll(spec)
                 .stream()
                 .map(carMapper::toCarResponseDTO)
