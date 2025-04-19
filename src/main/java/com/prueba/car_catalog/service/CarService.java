@@ -28,8 +28,10 @@ public class CarService {
                 .toList();
     }
 
-    public Car getCarById(Integer id) {
-        return carRepository.findById(id).orElse(null);
+    public CarResponseDTO getCarById(Integer id) {
+        return carRepository.findById(id)
+                .map(carMapper::toCarResponseDTO)
+                .orElse(null);
     }
 
     public CarResponseDTO saveCar(CarRequestDTO carRequestDTO) {

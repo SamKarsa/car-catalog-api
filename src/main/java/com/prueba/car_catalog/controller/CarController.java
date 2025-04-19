@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prueba.car_catalog.dto.ApiResponse;
 import com.prueba.car_catalog.dto.request.CarRequestDTO;
 import com.prueba.car_catalog.dto.response.CarResponseDTO;
-import com.prueba.car_catalog.model.Car;
 import com.prueba.car_catalog.service.CarService;
 
 import jakarta.validation.Valid;
@@ -33,7 +32,7 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public Car getCarById(@PathVariable Integer id) {
+    public CarResponseDTO getCarById(@PathVariable Integer id) {
         return carService.getCarById(id);
     }
 

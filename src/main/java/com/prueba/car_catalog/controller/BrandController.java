@@ -3,6 +3,7 @@ package com.prueba.car_catalog.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,11 @@ public class BrandController {
     @GetMapping("/all")
     public List<BrandResponseDTO> getAllBrands() {
         return brandService.getAllBrands();
+    }
+
+    @GetMapping("/{id}")
+    public BrandResponseDTO getBrandById(@PathVariable Integer id) {
+        return brandService.getBrandById(id);
     }
 
     @PostMapping

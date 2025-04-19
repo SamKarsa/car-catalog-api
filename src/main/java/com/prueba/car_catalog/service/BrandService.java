@@ -25,8 +25,10 @@ public class BrandService {
                 .toList();
     }
 
-    public Brand getBrandById(Integer id) {
-        return brandRepository.findById(id).orElse(null);
+    public BrandResponseDTO getBrandById(Integer id) {
+        return brandRepository.findById(id)
+                .map(brandMapper::toBrandResponseDTO)
+                .orElse(null);
     }
 
     public BrandResponseDTO saveBrand(BrandRequestDTO brandrRequestDTO) {
