@@ -3,6 +3,8 @@ package com.prueba.car_catalog.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +34,12 @@ public class CarService {
     private final BrandRepository brandRepository;
 
     @Transactional(readOnly = true)
-    public List<CarResponseDTO> getAllCars() {
-        List<Car> cars = carRepository.findAll();
+    public Page<CarResponseDTO> getAllCars(Pageable pageable) {
+        Page<Car> cars = carRepository.findAll(pageable);
         if (cars.isEmpty()) {
             throw new ResourceNotFoundException("No cars found in the database");
         }
-        return cars.stream()
-                .map(carMapper::toCarResponseDTO)
-                .toList();
+        return cars.map(carMapper::toCarResponseDTO);
     }
 
     @Transactional(readOnly = true)
