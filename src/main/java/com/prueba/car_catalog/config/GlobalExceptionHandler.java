@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 "VALIDATION_FAILED",
-                "Error de validación en los datos de entrada",
+                "Validation error in input data",
                 getRequestPath(request),
                 errors);
 
