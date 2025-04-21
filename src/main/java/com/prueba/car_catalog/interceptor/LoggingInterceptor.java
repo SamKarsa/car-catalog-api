@@ -1,5 +1,7 @@
 package com.prueba.car_catalog.interceptor;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,23 +17,30 @@ public class LoggingInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull Object handler) throws Exception {
+
         if (request.getRequestURI().contains("/api/cars/all") && "GET".equalsIgnoreCase(request.getMethod())) {
             logger.info("""
                     Call to the endpoint /api/cars/all
                     IP: {}
-                    Parameters: {}"
+                    Parameters: {}
                     """,
                     request.getRemoteAddr(),
                     request.getQueryString());
         }
-        return true; // Continue with execution
+        return true;
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
+    public void afterCompletion(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull Object handler,
+            @Nullable Exception ex) throws Exception {
+
         if (request.getRequestURI().contains("/api/cars/all") && "GET".equalsIgnoreCase(request.getMethod())) {
             logger.info("""
                     Answer sent:
